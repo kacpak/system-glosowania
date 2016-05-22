@@ -1,4 +1,4 @@
-package com.election.repositories;
+/*package com.election.repositories;
 import org.springframework.data.repository.CrudRepository;
 
 import com.election.domain.TestObject;
@@ -9,3 +9,4 @@ public interface TestObjectRepository  extends CrudRepository<TestObject, Intege
 	      TestObject saveTestObject(TestObject testObject);
 
 }
+*/

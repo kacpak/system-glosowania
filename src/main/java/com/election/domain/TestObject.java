@@ -1,4 +1,4 @@
-package com.election.domain;
+/*package com.election.domain;
 
 import java.math.BigDecimal;
 
@@ -31,3 +31,4 @@ public class TestObject {
 	private BigDecimal price;
 
 }
+*/

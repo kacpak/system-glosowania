@@ -1,4 +1,4 @@
-package com.election.loader;
+/*package com.election.loader;
 
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
@@ -21,3 +21,4 @@ public class Loader implements ApplicationListener<ContextRefreshedEvent> {
 	
 
 }
+*/

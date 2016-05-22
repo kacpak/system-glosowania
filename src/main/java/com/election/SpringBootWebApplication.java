@@ -1,4 +1,4 @@
-package com.election.boot;
+package com.election;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

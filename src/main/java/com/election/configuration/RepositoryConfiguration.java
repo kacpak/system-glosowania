@@ -1,4 +1,4 @@
-package com.election.configuration;
+/*package com.election.configuration;
 
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.orm.jpa.EntityScan;
@@ -13,3 +13,4 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableTransactionManagement
 public class RepositoryConfiguration {
 }
+*/
