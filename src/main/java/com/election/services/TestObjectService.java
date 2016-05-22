@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.election.domain.TestObject;
-import com.election.repositiories.TestObjectRepository;
+import com.election.repositories.TestObjectRepository;
 
 @Service
 public class TestObjectService {

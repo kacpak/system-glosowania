@@ -1,4 +1,4 @@
-package com.election.repositiories;
+package com.election.repositories;
 import org.springframework.data.repository.CrudRepository;
 
 import com.election.domain.TestObject;
