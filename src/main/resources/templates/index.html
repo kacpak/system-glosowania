@@ -1,17 +1,62 @@
 
 <!DOCTYPE html>
-<html>
-<head lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
+<head lang="pl">
 
-<title>Spring Framework Guru</title>
+<title>Witamy na stronie głosowania i prosimy o identyfikację w
+	celu zaglosowania</title>
 
 <!--/*/ <th:block th:include="fragments/headerinc :: head"></th:block> /*/-->
 </head>
 <body>
-bang bang
+
 	<div class="container">
 		<!--/*/ <th:block th:include="fragments/header :: header"></th:block> /*/-->
+
+
+		<div class="container" th:object="${person}">
+
+			<div id="form">
+				<form class="form-horizontal" th:action="@{/person/save}"
+					method="post">
+					<!-- <input type="hidden" th:field="*{id}" /> -->
+					
+					<div
+						th:class="${#fields.hasErrors('pesel')}? 'form-group  has-error' : 'form-group'">
+						<label class="col-sm-2 control-label" th:text="#{pesel}">.</label>
+						<div class="col-sm-10">
+							<input type="text" class="form-control" th:field="*{pesel}" /> <span
+								id="helpBlock2" class="help-block"
+								th:if="${#fields.hasErrors('pesel')}" th:errors="*{pesel}">
+							</span>
+						</div>
+					</div>
+					
+						<div
+						th:class="${#fields.hasErrors('peselNumber')}? 'form-group  has-error' : 'form-group'">
+						<label class="col-sm-2 control-label"  th:text="#{numerDowoduOsobistego}" >.</label>
+						<div class="col-sm-10">
+							<input type="text" class="form-control" th:field="*{peselNumber}" /> <span
+								id="helpBlock2" class="help-block"
+								th:if="${#fields.hasErrors('peselNumber')}" th:errors="*{peselNumber}">
+							</span>
+						</div>
+					</div>
+
+
+					<div class="col-sm-offset-2 row" id="btnSave">
+						<button type="submit" class="btn btn-default">
+							<span th:text="#{button.save}">Submit</span>
+						</button>
+					</div>
+				</form>
+			</div>
+
+
+		</div>
 	</div>
+
+
 </body>
 </html>
 
