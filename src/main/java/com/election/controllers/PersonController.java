@@ -37,6 +37,7 @@ public class PersonController {
 			return "index";  /*- wraca na strone startową */
 		}
 		
+		person.setIdNumber(person.getIdNumber().toLowerCase());
 		personService.saveTestObject(person);
 		log.info("person: " + person.toString());
 	
