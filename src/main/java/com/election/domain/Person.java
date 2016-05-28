@@ -2,6 +2,7 @@ package com.election.domain;
 
 import java.math.BigDecimal;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -25,10 +26,12 @@ public class Person {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer id;
 
+	@Column(unique = true)
 	@Size(min = 11, max = 11)
 	@NotBlank
 	private String pesel;
 	
+	@Column(unique = true)
 	@Size(min = 9, max = 9)
 	@NotBlank
 	private String peselNumber;
