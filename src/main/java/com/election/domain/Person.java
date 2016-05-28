@@ -29,11 +29,11 @@ public class Person {
 	@Column(unique = true)
 	@Size(min = 11, max = 11)
 	@NotBlank
-	private String pesel;
+	private String peselNumber;
 	
 	@Column(unique = true)
 	@Size(min = 9, max = 9)
 	@NotBlank
-	private String peselNumber;
+	private String idNumber;
 
 }

@@ -37,25 +37,25 @@
 				<!-- <input type="hidden" th:field="*{id}" /> -->
 
 				<div
-					th:class="${#fields.hasErrors('pesel')}? 'form-group  has-error' : 'form-group'">
-					<label class="col-sm-2 control-label" th:text="#{pesel}">.</label>
+					th:class="${#fields.hasErrors('peselNumber')}? 'form-group  has-error' : 'form-group'">
+					<label class="col-sm-2 control-label" th:text="#{peselNumber}">.</label>
 					<div class="col-sm-10">
-						<input type="text" class="form-control" th:field="*{pesel}" /> <span
+						<input type="text" class="form-control" th:field="*{peselNumber}" /> <span
 							id="helpBlock2" class="help-block"
-							th:if="${#fields.hasErrors('pesel')}" th:errors="*{pesel}">
+							th:if="${#fields.hasErrors('peselNumber')}" th:errors="*{peselNumber}">
 						</span>
 					</div>
 				</div>
 
 				<div
-					th:class="${#fields.hasErrors('peselNumber')}? 'form-group  has-error' : 'form-group'">
+					th:class="${#fields.hasErrors('idNumber')}? 'form-group  has-error' : 'form-group'">
 					<label class="col-sm-2 control-label"
-						th:text="#{numerDowoduOsobistego}">.</label>
+						th:text="#{idNumber}">.</label>
 					<div class="col-sm-10">
-						<input type="text" class="form-control" th:field="*{peselNumber}" />
+						<input type="text" class="form-control" th:field="*{idNumber}" />
 						<span id="helpBlock2" class="help-block"
-							th:if="${#fields.hasErrors('peselNumber')}"
-							th:errors="*{peselNumber}"> </span>
+							th:if="${#fields.hasErrors('idNumber')}"
+							th:errors="*{idNumber}"> </span>
 					</div>
 				</div>
 
