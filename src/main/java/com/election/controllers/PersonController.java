@@ -10,12 +10,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.election.domain.Person;
 import com.election.services.PersonService;
+import com.election.validators.PeselValidator;
 
 
 @Controller
@@ -25,6 +28,16 @@ public class PersonController {
 	
 	@Autowired
 	private PersonService personService;
+	
+	@Autowired
+	private PeselValidator validator;
+	
+
+	@InitBinder
+	protected void initBinder(final WebDataBinder binder) {
+	  binder.addValidators(validator);
+	}
+	
 	
 	
 	@RequestMapping(value = "person/save", method = RequestMethod.POST)
@@ -36,6 +49,10 @@ public class PersonController {
 			
 			return "index";  /*- wraca na strone startową */
 		}
+		
+		
+		
+		validator.validate(person ,bindingResult);
 		
 		person.setIdNumber(person.getIdNumber().toLowerCase());
 		personService.saveTestObject(person);
