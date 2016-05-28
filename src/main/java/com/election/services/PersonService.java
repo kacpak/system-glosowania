@@ -15,14 +15,19 @@ public class PersonService {
 
 	
 	@Autowired
-	private PersonRepository testObjectRepository;
+	private PersonRepository personRepository;
 	
-	
-	
-	public void saveTestObject(Person testObject)
+	public Person findById(Integer id)
 	{
-		log.info(testObject.toString());
-		testObjectRepository.save(testObject);
+		Person person  = personRepository.findById(id);
+		return person;
+	}
+	
+	
+	public void saveTestObject(Person person)
+	{
+		log.info("saving person: " + person.toString());
+		personRepository.save(person);
 	}
 	
 }

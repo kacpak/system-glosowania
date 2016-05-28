@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -34,6 +35,26 @@ public class PersonController {
 			model.addAttribute("person", person);
 			
 			return "index";  /*- wraca na strone startową */
+		}
+		
+		personService.saveTestObject(person);
+		log.info("person: " + person.toString());
+	
+		return "redirect:/" + "person/voting/" + person.getId();
+	
+	}
+	
+	
+	@RequestMapping(value = "person/voting/{id}", method = RequestMethod.GET)
+	public String savePerson(Model model, @Valid Person person, BindingResult bindingResult, @PathVariable Integer id) throws IOException {
+		
+		model.addAttribute("person", personService.findById(id));
+		
+		if (bindingResult.hasErrors()) { // walidacja
+			
+			model.addAttribute("person", personService.findById(id));
+			
+			return "personVoting";  /*- wraca do widoku personVoting */
 		}
 		
 		personService.saveTestObject(person);
