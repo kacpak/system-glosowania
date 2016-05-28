@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.election.domain.Person;
 import com.election.services.PersonService;
+import com.election.validators.IdNumberValidator;
 import com.election.validators.PeselValidator;
 
 
@@ -30,12 +31,15 @@ public class PersonController {
 	private PersonService personService;
 	
 	@Autowired
-	private PeselValidator validator;
+	private PeselValidator peselValidator;
+	
+	@Autowired
+	private IdNumberValidator idNumberValidator;
 	
 
 	@InitBinder
 	protected void initBinder(final WebDataBinder binder) {
-	  binder.addValidators(validator);
+	  binder.addValidators(peselValidator, idNumberValidator);
 	}
 	
 	
@@ -52,7 +56,9 @@ public class PersonController {
 		
 		
 		
-		validator.validate(person ,bindingResult);
+		peselValidator.validate(person ,bindingResult);
+		
+		idNumberValidator.validate(person, bindingResult);
 		
 		person.setIdNumber(person.getIdNumber().toLowerCase());
 		personService.saveTestObject(person);
