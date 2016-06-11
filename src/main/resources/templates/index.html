@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head lang="pl">
@@ -9,6 +10,7 @@
 <!--/*/ <th:block th:include="fragments/headerinc :: head"></th:block> /*/-->
 </head>
 <body>
+
 
 
 	<div class="container" th:object="${person}">
@@ -71,7 +73,7 @@
 
 	</div>
 
-
+<span th:text="#{cookies}"></span>
 
 </body>
 </html>

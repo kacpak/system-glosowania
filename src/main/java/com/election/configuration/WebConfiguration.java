@@ -1,4 +1,4 @@
-package com.election.configuration;
+/*package com.election.configuration;
 
 import org.springframework.context.annotation.Configuration;
 
@@ -6,3 +6,4 @@ import org.springframework.context.annotation.Configuration;
 public class WebConfiguration {
 
 }
+*/
