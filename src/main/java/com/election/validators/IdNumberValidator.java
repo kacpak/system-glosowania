@@ -97,7 +97,6 @@ public class IdNumberValidator implements Validator {
 		/*- dla pierwszych trzech liter */
 		for (int i = 0; i < 3; i++) {
 			char c = idNumber.charAt(i);
-			log.info(""+c);
 			sum += weigth[i] * legend.get(c);
 
 		}
