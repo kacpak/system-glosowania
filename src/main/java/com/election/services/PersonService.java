@@ -23,6 +23,13 @@ public class PersonService {
 		return person;
 	}
 	
+	public Person findByPesel(String pesel) {
+		return personRepository.findByPeselNumber(pesel);
+	}
+	
+	public Person findByIdNumber(String idNumber) {
+		return personRepository.findByIdNumber(idNumber);
+	}
 	
 	public void saveTestObject(Person person)
 	{

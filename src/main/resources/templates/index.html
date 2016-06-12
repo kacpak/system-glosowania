@@ -1,45 +1,25 @@
-
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head lang="pl">
-
-<title>Witamy na stronie głosowania i prosimy o identyfikację w
-	celu zaglosowania</title>
-
-<!--/*/ <th:block th:include="fragments/headerinc :: head"></th:block> /*/-->
+<title th:text="#{title}">Voting system</title>
+<!--/*/ <th:block th:include="fragments/headMeta :: head"></th:block> /*/-->
 </head>
 <body>
-
-
-	<div class="container" th:object="${person}">
-		<!--/*/ <th:block th:include="fragments/header :: header"></th:block> /*/-->
-
-
-
-
+	<div class="container">
+		<!--/*/ <th:block th:include="fragments/pageHeader :: header"></th:block> /*/-->
 		<div class="jumbotron">
 			<div class="row text-center">
-				<div class="">
+				<div>
 					<h2>Witamy na stronie głosowania</h2>
 					<h3>Prosimy o identyfikację w celu zagłosowania</h3>
-
-
-
 				</div>
 			</div>
-
 		</div>
-
-
-		<div id="form">
-			<form class="form-horizontal" th:action="@{/person/save}"
-				method="post">
-				<!-- <input type="hidden" th:field="*{id}" /> -->
-
-				<div
-					th:class="${#fields.hasErrors('peselNumber')}? 'form-group  has-error' : 'form-group'">
-					<label class="col-sm-2 control-label" th:text="#{peselNumber}">.</label>
-					<div class="col-sm-10">
+		<div id="form" th:object="${person}">
+			<form class="form-horizontal" th:action="@{/person/save}" method="post">
+				<div th:class="${#fields.hasErrors('peselNumber')}? 'form-group  has-error' : 'form-group'">
+					<label class="col-sm-4 control-label" th:text="#{peselNumber}">PESEL</label>
+					<div class="col-sm-6">
 						<input type="text" class="form-control" th:field="*{peselNumber}" /> <span
 							id="helpBlock2" class="help-block"
 							th:if="${#fields.hasErrors('peselNumber')}" th:errors="*{peselNumber}">
@@ -47,32 +27,37 @@
 					</div>
 				</div>
 
-				<div
-					th:class="${#fields.hasErrors('idNumber')}? 'form-group  has-error' : 'form-group'">
-					<label class="col-sm-2 control-label"
-						th:text="#{idNumber}">.</label>
-					<div class="col-sm-10">
+				<div th:class="${#fields.hasErrors('idNumber')}? 'form-group  has-error' : 'form-group'">
+					<label class="col-sm-4 control-label" th:text="#{idNumber}">Nr Dowodu</label>
+					<div class="col-sm-6">
 						<input type="text" class="form-control" th:field="*{idNumber}" />
 						<span id="helpBlock2" class="help-block"
 							th:if="${#fields.hasErrors('idNumber')}"
 							th:errors="*{idNumber}"> </span>
 					</div>
 				</div>
+				
+				<div class="form-group">
+					<label class="col-sm-4 control-label" th:text="#{vote}">Głos</label>
+					<div class="col-sm-6">
+						<div class="radio" th:each="candidate : ${candidates}">
+							<label>
+								<input type="radio" name="candidate" id="option${candidate.key}" value="${candidate.key}" />
+								<span th:text="${candidate.value}"></span>
+							</label>
+						</div>
+					</div>
+				</div>
 
-
-				<div class="col-sm-offset-2 row" id="btnSave">
-					<button type="submit" class="btn btn-default">
-						<span th:text="#{button.save}">Submit</span>
-					</button>
+				<div class="form-group">
+					<div class="col-sm-offset-4 col-sm-6" id="btnSave">
+						<button type="submit" class="btn btn-primary btn-lg">
+							<span th:text="#{button.vote}">Submit</span>
+						</button>
+					</div>
 				</div>
 			</form>
 		</div>
-
-
 	</div>
-
-
-
 </body>
 </html>
-

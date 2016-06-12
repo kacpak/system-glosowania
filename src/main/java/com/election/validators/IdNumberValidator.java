@@ -18,15 +18,14 @@ public class IdNumberValidator implements Validator {
 
 	@Override
 	public void validate(Object target, Errors errors) {
-
 		Person person = (Person) target;
 
 		if (person != null && person.getIdNumber() != null) {
-
 			if (person.getIdNumber().matches("[A-Za-z]{3}\\d{6}")) {
-				
+				// Zmień numer dowodu na lowercase
 				person.setIdNumber(person.getIdNumber().toLowerCase());
 				
+				// Legenda
 				Map<Character, Integer> legend = new HashMap<>();
 				/*-  a-> 10, z->35, 26 elementów */
 				legend.put('a', 10);
@@ -56,41 +55,16 @@ public class IdNumberValidator implements Validator {
 				legend.put('y', 34);
 				legend.put('z', 35);
 
-				for (Character key : legend.keySet()) {
-
-					log.info(key + " - " + legend.get(key));
-				}
-
 				Boolean isValid = checkControlNumber(person.getIdNumber(), legend);
 
 				if (!isValid) {
 					errors.rejectValue("idNumber", "wrongControlNumber");
 				}
-
-				/*
-				 * String start = "a";
-				 * 
-				 * Integer startAsNumber = Integer.parseInt(start);
-				 * 
-				 * String back = startAsNumber.toString();
-				 * 
-				 * for(int i = 0; i < 26; i++ ){ startAsNumber += i;
-				 * 
-				 * 
-				 * legend.put((startAsNumber).toString(), i+10); }
-				 * 
-				 * - test for(String key: legend.keySet())
-				 * 
-				 * log.info(key + " - " + legend.get(key));
-				 */
-
 			}
 		}
-
 	}
 
 	public Boolean checkControlNumber(String idNumber, Map<Character, Integer> legend) {
-
 		int sum = 0;
 		int[] weigth = { 7, 3, 1, 7, 3, 1, 7, 3 };
 
@@ -98,7 +72,6 @@ public class IdNumberValidator implements Validator {
 		for (int i = 0; i < 3; i++) {
 			char c = idNumber.charAt(i);
 			sum += weigth[i] * legend.get(c);
-
 		}
 
 		int controlNumber = Character.getNumericValue(idNumber.charAt(3)); // konwersja
@@ -107,20 +80,14 @@ public class IdNumberValidator implements Validator {
 		for (int i = 4; i < idNumber.length(); i++) {
 			int c = Character.getNumericValue(idNumber.charAt(i));
 			sum += weigth[i - 1] * c;
-
 		}
 
 		log.info("suma kontrolna wynosi: " + sum);
 
 		sum %= 10;
 		log.info("suma kontrolna wynosi po modulo : " + sum);
-
-		if (controlNumber == sum) {
-			return true;
-		} else {
-
-			return false;
-		}
+		
+		return controlNumber == sum;
 	}
 
 	@Override

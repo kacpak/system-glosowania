@@ -7,5 +7,7 @@ import com.election.domain.Person;
 public interface PersonRepository  extends CrudRepository<Person, Integer>{
 	
 	Person findById(Integer id);
+	Person findByPeselNumber(String pesel);
+	Person findByIdNumber(String idNumber);
 	
 }

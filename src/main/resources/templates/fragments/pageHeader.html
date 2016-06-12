@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head lang="en"></head>
+<body>
+	<div th:fragment="header">
+	    <nav class="navbar navbar-default">
+	        <div class="container-fluid">
+	            <div class="navbar-header">
+	                <a class="navbar-brand" href="#" th:href="@{/}" th:text="#{title}">Strona startowa</a>
+	                <ul class="nav navbar-nav">
+	                    <li><a href="#" th:href="@{/testObject}" th:text="#{pageHeader.link}">Moze link na przysłosc</a></li>
+	                </ul>	
+	            </div>
+	        </div>
+	    </nav>
+	</div>
+</body>
+</html>

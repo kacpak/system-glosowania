@@ -34,5 +34,7 @@ public class Person {
 	@Pattern(regexp="[A-Za-z]{3}\\d{6}")
 	@NotBlank
 	private String idNumber;
+	
+	private boolean voted;
 
 }
