@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <!--/*/ <th:block th:include="fragments/headerinc :: head"></th:block> /*/-->
+    <!--/*/ <th:block th:include="fragments/headMeta :: head"></th:block> /*/-->
     <title>Access Denied page</title>
 </head>
 <body>
 <div class="container">
-    <!--/*/ <th:block th:include="fragments/header :: header"></th:block> /*/-->
+    <!--/*/ <th:block th:include="fragments/pageHeader :: header"></th:block> /*/-->
 
     <div class="container">
       <div th:fragment="header">
@@ -19,8 +19,6 @@
           </nav>
       </div>
   </div>
-
-    <!--/*/ <th:block th:include="fragments/footer :: footer"></th:block> /*/-->
 </div>
 </body>
 </html>

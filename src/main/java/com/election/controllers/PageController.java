@@ -60,7 +60,7 @@ public class PageController {
 			log.info("Walidacja niepoprawna: " + bindingResult.getAllErrors().toString());
 			
 			// Powrót na stronę główną
-			return "redirect:/error";
+			return "index";
 		}
 		
 		// Zmień numer dowodu na lowercase
