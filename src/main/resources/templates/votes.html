@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head lang="pl">
+<title th:text="#{title} + ' : ' + #{votingResults}">Voting system</title>
+<!--/*/ <th:block th:include="fragments/headMeta :: head"></th:block> /*/-->
+</head>
+<body>
+	<div class="container">
+		<!--/*/ <th:block th:include="fragments/pageHeader :: header"></th:block> /*/-->
+		<h1 class="page-header" th:text="#{votingResults}">Wyniki głosowania</h1>
+		<div th:each="vote : ${votes}">			
+			<div th:text="${vote.key} + ': ' + ${vote.value} + ' (' + ${#numbers.formatDecimal(100 * vote.value / totalVotes, 1, 'DEFAULT', 0, 'DEFAULT')} + '%)'"></div>
+			<div class="progress">
+			  <div class="progress-bar" role="progressbar" th:style="'width: ' + ${100 * vote.value / totalVotes} +'%;'"></div>
+			</div>
+		</div>	
+	</div>
+</body>
+</html>

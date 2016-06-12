@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.validation.Valid;
 
@@ -21,39 +22,45 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.election.domain.Person;
 import com.election.domain.Vote;
+import com.election.repositories.VoteRepository;
 import com.election.services.PersonService;
+import com.election.services.VoteService;
 import com.election.validators.IdNumberValidator;
 import com.election.validators.PeselValidator;
 
 
 @Controller
-public class PersonController {
+public class PageController {
 	
-	private Logger log = LoggerFactory.getLogger(PersonController.class);
+	private Logger log = LoggerFactory.getLogger(PageController.class);
 	
 	@Autowired
 	private PersonService personService;
 	
 	@Autowired
+	private VoteService voteService;
+	
+	@Autowired
 	private PeselValidator peselValidator;
 	
 	@Autowired
-	private IdNumberValidator idNumberValidator;
-	
+	private IdNumberValidator idNumberValidator;	
 
-	@InitBinder
+	@InitBinder("person")
 	protected void initBinder(final WebDataBinder binder) {
-	  binder.addValidators(peselValidator, idNumberValidator);
+		binder.addValidators(peselValidator, idNumberValidator);
 	}
 	
 	@RequestMapping(value = "person/save", method = RequestMethod.POST)
-	public String savePerson(Model model, @Valid Person person, BindingResult bindingResult) throws IOException {
+	public String savePerson(Model model, @Valid Person person, Vote vote, BindingResult bindingResult) throws IOException {		
 		// Jeśli walidacja osoby nie przeszła
-		if (bindingResult.hasErrors()) {			
+		if (bindingResult.hasErrors()) {
 			model.addAttribute("person", person);
+			model.addAttribute("vote", vote);
+			log.info("Walidacja niepoprawna: " + bindingResult.getAllErrors().toString());
 			
 			// Powrót na stronę główną
-			return "index";
+			return "redirect:/error";
 		}
 		
 		// Zmień numer dowodu na lowercase
@@ -63,25 +70,11 @@ public class PersonController {
 		peselValidator.validate(person, bindingResult);
 		idNumberValidator.validate(person, bindingResult);
 		
-		/* TODO zastanowić się czy potrzebne, gdy strona główna jest stroną głosowania
-		// Sprawdź czy dana osoba już istnieje w bazie
-		Person foundPerson = personService.findByPesel(person.getPeselNumber());
-		
-		// Jeśli nie to dodaj ją do bazy
-		if (foundPerson == null)
-			personService.saveTestObject(person);
-		else
-			person = foundPerson;
-				
-		log.info("person: " + person.toString());
-
-		// Jeśli osoba oddała już głos to zwróć błąd
-		if (person.isVoted())
-			return "redirect:/error";
-		*/
-		
-		log.info("person: " + person.toString());
+		log.info("person: " + person);
 		personService.saveTestObject(person);
+		
+		voteService.saveVote(vote);
+		log.info("Saved vote: " + vote);
 		
 		// Przejdź do strony głosowania
 		return "redirect:/" + "person/voting/" + person.getId();
@@ -89,8 +82,6 @@ public class PersonController {
 	
 	@RequestMapping(value = "person/voting/{id}", method = RequestMethod.GET)
 	public String savePerson(Model model, @Valid Person person, BindingResult bindingResult, @PathVariable Integer id) throws IOException {		
-		model.addAttribute("person", personService.findById(id));
-		
 		if (bindingResult.hasErrors()) { // walidacja			
 			model.addAttribute("person", personService.findById(id));
 			
@@ -103,18 +94,16 @@ public class PersonController {
 		return "redirect:/" + "index/";	
 	}
 	
-	
 	@RequestMapping("index")
 	String index(Model model) {
 		Person person = new Person();
 		model.addAttribute("person", new Person());
 		log.info("person: " + person.toString());
-				
-		Map<Integer, String> candidates = new LinkedHashMap<>();
-		candidates.put(1,  "Trump");
-		candidates.put(2,  "Hilary");		
-		model.addAttribute("candidates", candidates);
-		log.info("index: Added candidates");
+		
+		Vote vote = new Vote();
+		model.addAttribute("vote", vote);
+		
+		model.addAttribute("candidates", Vote.Candidates);
 		
 		return "index";
 	}
@@ -122,6 +111,20 @@ public class PersonController {
 	@RequestMapping("")
 	String indexT(Model model) {
 		return index(model);
+	}
+	
+	@RequestMapping(value = "votes", method = RequestMethod.GET)
+	public String showVotes(Model model) {
+		Map<String, Long> namedCountedVotes = new HashMap<>();
+		Long totalVotes = 0L;
+		for (Entry<Integer, Long> votes : voteService.getCountedVotes().entrySet()) {
+			namedCountedVotes.put(Vote.Candidates.get(votes.getKey()), votes.getValue());
+			totalVotes += votes.getValue();
+		}
+		model.addAttribute("votes", namedCountedVotes);
+		model.addAttribute("totalVotes", totalVotes == 0 ? 1 : totalVotes);
+		
+		return "votes";
 	}
 	
 }

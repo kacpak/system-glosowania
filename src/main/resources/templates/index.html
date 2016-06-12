@@ -42,7 +42,7 @@
 					<div class="col-sm-6">
 						<div class="radio" th:each="candidate : ${candidates}">
 							<label>
-								<input type="radio" name="candidate" th:id="'option' + ${candidate.key}" th:value="${candidate.key}" />
+								<input type="radio" th:field="${vote.candidate}" th:value="${candidate.key}" />
 								<span th:text="${candidate.value}"></span>
 							</label>
 						</div>

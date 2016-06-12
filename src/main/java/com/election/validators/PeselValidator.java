@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
-import com.election.controllers.PersonController;
+import com.election.controllers.PageController;
 import com.election.domain.Person;
 
 /*- według http://www.algorytm.org/numery-identyfikacyjne/pesel.html */
