@@ -46,8 +46,9 @@ public class PageController {
 	@Autowired
 	private IdNumberValidator idNumberValidator;	
 
-	@InitBinder("person")
+	@InitBinder
 	protected void initBinder(final WebDataBinder binder) {
+		if(binder.getObjectName().equals("person"))
 		binder.addValidators(peselValidator, idNumberValidator);
 	}
 	

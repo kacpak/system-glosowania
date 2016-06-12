@@ -10,31 +10,28 @@ import com.election.repositories.PersonRepository;
 
 @Service
 public class PersonService {
-	
+
 	private Logger log = LoggerFactory.getLogger(PersonService.class);
 
-	
 	@Autowired
 	private PersonRepository personRepository;
-	
-	public Person findById(Integer id)
-	{
-		Person person  = personRepository.findById(id);
+
+	public Person findById(Integer id) {
+		Person person = personRepository.findById(id);
 		return person;
 	}
-	
+
 	public Person findByPesel(String pesel) {
 		return personRepository.findByPeselNumber(pesel);
 	}
-	
+
 	public Person findByIdNumber(String idNumber) {
 		return personRepository.findByIdNumber(idNumber);
 	}
-	
-	public void saveTestObject(Person person)
-	{
+
+	public void saveTestObject(Person person) {
 		log.info("saving person: " + person.toString());
 		personRepository.save(person);
 	}
-	
+
 }
