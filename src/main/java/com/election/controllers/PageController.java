@@ -126,36 +126,4 @@ public class PageController {
 		
 		return "votes";
 	}
-	
-	@RequestMapping(value = "error400.html")
-	public String error400(Model model) {
-		model.addAttribute("errorCode", "400");
-		model.addAttribute("errorMessage", "Nieprawidłowe zapytanie.");
-		
-		return "error400";
-	}
-	
-	@RequestMapping(value = "error403.html")
-	public String error403(Model model) {
-		model.addAttribute("errorCode", "403");
-		model.addAttribute("errorMessage", "Nie masz dostępu do tej strony.");
-		
-		return "error403";
-	}
-
-	@RequestMapping(value = "error404.html")
-	public String error404(Model model) {
-		model.addAttribute("errorCode", "404");
-		model.addAttribute("errorMessage", "Nie znaleziono strony.");
-		
-		return "error404";
-	}
-		
-	@RequestMapping(value = "error500.html")
-	public String error500(Model model) {
-		model.addAttribute("errorCode", "500");
-		model.addAttribute("errorMessage", "Wystąpił błąd aplikacji.");
-		
-		return "error500";
-	}
 }
