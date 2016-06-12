@@ -24,8 +24,10 @@ public class IdNumberValidator implements Validator {
 		if (person != null && person.getIdNumber() != null) {
 
 			if (person.getIdNumber().matches("[A-Za-z]{3}\\d{6}")) {
-
-				Map<Character, Integer> legend = new HashMap();
+				
+				person.setIdNumber(person.getIdNumber().toLowerCase());
+				
+				Map<Character, Integer> legend = new HashMap<>();
 				/*-  a-> 10, z->35, 26 elementów */
 				legend.put('a', 10);
 				legend.put('b', 11);
@@ -95,6 +97,7 @@ public class IdNumberValidator implements Validator {
 		/*- dla pierwszych trzech liter */
 		for (int i = 0; i < 3; i++) {
 			char c = idNumber.charAt(i);
+			log.info(""+c);
 			sum += weigth[i] * legend.get(c);
 
 		}

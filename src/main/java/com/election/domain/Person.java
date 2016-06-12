@@ -1,13 +1,10 @@
 package com.election.domain;
 
-import java.math.BigDecimal;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Version;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
@@ -35,7 +32,6 @@ public class Person {
 	@Column(unique = true)
 	@Size(min = 9, max = 9)
 	@Pattern(regexp="[A-Za-z]{3}\\d{6}")
-	/*- może lepiej jednak po odebraniu danych uwzględniać wielkość znaków i automatycznie zamieniać na małe, żeby nie było podwójnej wartości klucza */
 	@NotBlank
 	private String idNumber;
 
