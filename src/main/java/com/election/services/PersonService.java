@@ -30,7 +30,8 @@ public class PersonService {
 	}
 
 	public void saveTestObject(Person person) {
-		log.info("saving person: " + person.toString());
+		//log.info("saving person: " + person.toString());
+		log.info("Saving person...");
 		personRepository.save(person);
 	}
 

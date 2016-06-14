@@ -22,6 +22,7 @@ public class Vote {
 	
 	static {
 		Candidates = new HashMap<>();
+		Candidates.put(0, "-- Głos nieważny");
 		Candidates.put(1, "Hilary Clinton");
 		Candidates.put(2, "Donald Trump");
 		Candidates.put(3, "Bernie Sanders");
@@ -31,5 +32,5 @@ public class Vote {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer id;
 	
-	private Integer candidate;
+	private Integer candidate = 0;
 }

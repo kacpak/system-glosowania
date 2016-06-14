@@ -5,18 +5,18 @@
 <!--/*/ <th:block th:include="fragments/headMeta :: head"></th:block> /*/-->
 </head>
 <body>
-	<div class="container">
+	<div class="container" th:object="${person}">
 		<!--/*/ <th:block th:include="fragments/pageHeader :: header"></th:block> /*/-->
 		<div class="jumbotron">
 			<div class="row text-center">
 				<div>
-					<h2>Witamy na stronie głosowania</h2>
-					<h3>Prosimy o identyfikację w celu zagłosowania</h3>
+					<h2 th:text="#{home.welcome}">Welcome</h2>
+					<h3 th:text="#{home.desc}"></h3>
 				</div>
 			</div>
 		</div>
-		<div id="form" th:object="${person}">
-			<form class="form-horizontal" th:action="@{/person/save}" method="post">
+		<div id="form">
+			<form class="form-horizontal" th:action="@{/save}" method="post">
 				<div th:class="${#fields.hasErrors('peselNumber')}? 'form-group  has-error' : 'form-group'">
 					<label class="col-sm-4 control-label" th:text="#{peselNumber}">PESEL</label>
 					<div class="col-sm-6">
@@ -28,7 +28,7 @@
 				</div>
 
 				<div th:class="${#fields.hasErrors('idNumber')}? 'form-group  has-error' : 'form-group'">
-					<label class="col-sm-4 control-label" th:text="#{idNumber}">Nr Dowodu</label>
+					<label class="col-sm-4 control-label" th:text="#{idNumber}">Id number</label>
 					<div class="col-sm-6">
 						<input type="text" class="form-control" th:field="*{idNumber}" />
 						<span id="helpBlock2" class="help-block"
@@ -38,7 +38,7 @@
 				</div>
 				
 				<div class="form-group">
-					<label class="col-sm-4 control-label" th:text="#{vote}">Głos</label>
+					<label class="col-sm-4 control-label" th:text="#{vote}">Vote</label>
 					<div class="col-sm-6">
 						<div class="radio" th:each="candidate : ${candidates}">
 							<label>

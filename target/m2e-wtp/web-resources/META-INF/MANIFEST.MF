@@ -1,9 +1,9 @@
 Manifest-Version: 1.0
 Implementation-Title: Election project
 Implementation-Version: 0.0.1-SNAPSHOT
-Built-By: Ja
+Built-By: kacpa
 Implementation-Vendor-Id: com.election
-Build-Jdk: 1.8.0_74
+Build-Jdk: 1.8.0_71
 Implementation-URL: http://projects.spring.io/spring-boot/election/
 Created-By: Maven Integration for Eclipse
 Implementation-Vendor: Pivotal Software, Inc.

@@ -2,7 +2,6 @@ package com.election.controllers;
 
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -16,17 +15,16 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.election.domain.Person;
 import com.election.domain.Vote;
-import com.election.repositories.VoteRepository;
 import com.election.services.PersonService;
 import com.election.services.VoteService;
 import com.election.validators.IdNumberValidator;
 import com.election.validators.PeselValidator;
+import com.election.validators.VoteValidator;
 
 
 @Controller
@@ -44,74 +42,61 @@ public class PageController {
 	private PeselValidator peselValidator;
 	
 	@Autowired
-	private IdNumberValidator idNumberValidator;	
+	private IdNumberValidator idNumberValidator;
+	
+	@Autowired
+	private VoteValidator voteValidator;
 
-	@InitBinder
-	protected void initBinder(final WebDataBinder binder) {
-		if(binder.getObjectName().equals("person"))
+	@InitBinder("person")
+	protected void initPersonBinder(final WebDataBinder binder) {
 		binder.addValidators(peselValidator, idNumberValidator);
 	}
-	
-	@RequestMapping(value = "person/save", method = RequestMethod.POST)
-	public String savePerson(Model model, @Valid Person person, Vote vote, BindingResult bindingResult) throws IOException {		
-		// Jeśli walidacja osoby nie przeszła
-		if (bindingResult.hasErrors()) {
-			model.addAttribute("person", person);
-			model.addAttribute("vote", vote);
-			log.info("Walidacja niepoprawna: " + bindingResult.getAllErrors().toString());
-			
-			// Powrót na stronę główną
-			return "index";
-		}
-		
-		// Zmień numer dowodu na lowercase
-		person.setIdNumber(person.getIdNumber().toLowerCase());
-		
-		// Dodatkowa walidacja pól
-		peselValidator.validate(person, bindingResult);
-		idNumberValidator.validate(person, bindingResult);
-		
-		log.info("person: " + person);
-		personService.saveTestObject(person);
-		
-		voteService.saveVote(vote);
-		log.info("Saved vote: " + vote);
-		
-		// Przejdź do strony głosowania
-		return "redirect:/" + "person/voting/" + person.getId();
+
+	@InitBinder("vote")
+	protected void initVoteBinder(final WebDataBinder binder) {
+		binder.setValidator(voteValidator);
 	}
 	
-	@RequestMapping(value = "person/voting/{id}", method = RequestMethod.GET)
-	public String savePerson(Model model, @Valid Person person, BindingResult bindingResult, @PathVariable Integer id) throws IOException {		
-		if (bindingResult.hasErrors()) { // walidacja			
-			model.addAttribute("person", personService.findById(id));
-			
-			return "personVoting";  /*- wraca do widoku personVoting */
-		}
-		
-		personService.saveTestObject(person);
-		log.info("person: " + person.toString());
-	
-		return "redirect:/" + "index/";	
-	}
-	
-	@RequestMapping("index")
+	@RequestMapping(value={"", "index"})
 	String index(Model model) {
-		Person person = new Person();
+		log.info("Otworzono stronę główną");
+		
 		model.addAttribute("person", new Person());
-		log.info("person: " + person.toString());
-		
-		Vote vote = new Vote();
-		model.addAttribute("vote", vote);
-		
+		model.addAttribute("vote", new Vote());
 		model.addAttribute("candidates", Vote.Candidates);
 		
 		return "index";
 	}
 	
-	@RequestMapping("")
-	String indexT(Model model) {
-		return index(model);
+	@RequestMapping(value = "save", method = RequestMethod.POST)
+	public String savePerson(Model model, @Valid Person person, BindingResult personBindingResult, @Valid Vote vote, BindingResult voteBindingResult) throws IOException {		
+		// Jeśli walidacja nie przeszła pomyślnie
+		if (personBindingResult.hasErrors() || voteBindingResult.hasErrors()) {
+			log.info("Błędy mapowania osoby: " + personBindingResult.getAllErrors());
+			log.info("Błędy mapowania głosu: " + voteBindingResult.getAllErrors());
+			
+			model.addAttribute("person", person);
+			model.addAttribute("vote", vote);
+			model.addAttribute("candidates", Vote.Candidates);
+			
+			// Wyświetl stronę główną
+			return "index";
+		}
+		
+		personService.saveTestObject(person);
+		log.info("Saved person to database");
+		
+		voteService.saveVote(vote);
+		log.info("Saved vote to database");
+		
+		// Przejdź do strony potwierdzenia zagłosowania
+		return "redirect:/voted";
+	}
+	
+	@RequestMapping(value = "voted", method = RequestMethod.GET)
+	public String voted(Model model) throws IOException {
+		log.info("Wyświetlono podziękowanie za oddany głos");
+		return "personVoted";
 	}
 	
 	@RequestMapping(value = "votes", method = RequestMethod.GET)

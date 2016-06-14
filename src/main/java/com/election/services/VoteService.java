@@ -20,7 +20,8 @@ public class VoteService {
 	private VoteRepository voteRepository;
 	
 	public void saveVote(Vote vote) {
-		log.info("Saving vote: " + vote.toString());
+		//log.info("Saving vote: " + vote.toString());
+		log.info("Saving vote...");
 		voteRepository.save(vote);
 	}
 	

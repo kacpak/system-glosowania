@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
-import com.election.controllers.PageController;
 import com.election.domain.Person;
 
 /*- według http://www.algorytm.org/numery-identyfikacyjne/pesel.html */
@@ -22,88 +21,74 @@ public class PeselValidator implements Validator {
 
 	@Override
 	public void validate(Object target, Errors errors) {
+		log.info("Waliduję PESEL");
 
 		Person person = (Person) target;
-		if (person != null && person.getPeselNumber() != null) {
-			
-
-			if (person.getPeselNumber().matches("\\d{11}")) {
-
-				String yearTwoFirstDigits = ""; /*- uzupełniane na podstawie miesiąca niżej */
-				String yearTwoLastDigits = person.getPeselNumber().substring(0, 2);
-				log.info("yearTwoLastDigits " + yearTwoLastDigits);
-
-				int month = Integer.parseInt(person.getPeselNumber().substring(2, 4));
-				log.info("month " + month);
-
-				if (month > 80 && month <= 80 + 12) { /*-  dla lat 1800 - 1899 + 80 do miesiąca */
-					yearTwoFirstDigits = "18";
-					errors.rejectValue("peselNumber", "month>80");
-				}
-
-				else if (month > 40 && month <= 40 + 12) { /*-  dla lat 2100 - 2199 + 40 do miesiąca */
-					yearTwoFirstDigits = "21";
-					errors.rejectValue("peselNumber", "month>40");
-				}
-
-				else if (month > 60 && month <= 60 + 12) { /*-  dla lat 2200 - 2299 + 60 do miesiąca */
-					yearTwoFirstDigits = "22";
-					errors.rejectValue("peselNumber", "month>60");
-				}
-
-				else if (month > 20 && month <= 20 + 12) { /*-  dla lat 2000 - 2099  + 20 do miesiąca */
-					yearTwoFirstDigits = "20";
-					errors.rejectValue("peselNumber", "month>20");
-				}
-
-				else if (month > 0 && month <= 12) { /*-  dla lat dla lat 1900 - 1999 */
-					yearTwoFirstDigits = "19";
-					/* jest ok */
-				}
-
-				else {
-					errors.rejectValue("peselNumber", "wrongMonth");
-				}
-
-				int day = Integer.parseInt(person.getPeselNumber().substring(4, 6));
-				log.info("day " + day);
-
-				if (day > 31) { /*-  żaden miesiąc nie ma więcej niz 31 dni */
-					errors.rejectValue("peselNumber", "day>31");
-				}
-
-				if (!yearTwoFirstDigits.equals("")) {
-					String yearAsString = yearTwoFirstDigits.concat(yearTwoLastDigits);
-					int year = Integer.parseInt(yearAsString);
-					log.info("year " + year);
-
-					DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-					format.setLenient(false); /*- wymuszenie błędu przy np. 29 lutym, gdy go nie było */
-
-					/*- 1999 luty -> 28 dni, 1996 luty -> 29 dni */
-					/*- zatem Pesel 99022955555  lub 96022955555 */
-
-					try {
-						format.parse(yearAsString + "-" + month + "-" + day);
-					} catch (ParseException e) { /*- data nie istnieje w kalendarzu */
-						errors.rejectValue("peselNumber", "dateDoesNotExist");
-						log.info(e.getMessage());
-						e.printStackTrace();
-					}
-
-					/*- sprawdzanie sumy kontrolnej: */
-					/*- np. 02070803628 -> ok. czyli z np. 2 na końcu nie ok */
-					Boolean isValid = checkControlNumber(person.getPeselNumber());
-
-					if (!isValid) {
-						errors.rejectValue("peselNumber", "wrongControlNumber");
-					}
-
-				}
-
-			}
+		if (person == null || person.getPeselNumber() == null) {
+			log.info("Nie podano numeru PESEL");
+			return;
 		}
 
+		if (person.getPeselNumber().matches("\\d{11}")) {
+			String yearTwoFirstDigits = ""; /*- uzupełniane na podstawie miesiąca niżej */
+			String yearTwoLastDigits = person.getPeselNumber().substring(0, 2);
+
+			log.info("Sprawdzam miesiąc");
+			int month = Integer.parseInt(person.getPeselNumber().substring(2, 4));
+			
+			if (month > 80 && month <= 80 + 12) { /*-  dla lat 1800 - 1899 + 80 do miesiąca */
+				yearTwoFirstDigits = "18";
+				errors.rejectValue("peselNumber", "month>80");
+			} else if (month > 40 && month <= 40 + 12) { /*-  dla lat 2100 - 2199 + 40 do miesiąca */
+				yearTwoFirstDigits = "21";
+				errors.rejectValue("peselNumber", "month>40");
+			} else if (month > 60 && month <= 60 + 12) { /*-  dla lat 2200 - 2299 + 60 do miesiąca */
+				yearTwoFirstDigits = "22";
+				errors.rejectValue("peselNumber", "month>60");
+			} else if (month > 20 && month <= 20 + 12) { /*-  dla lat 2000 - 2099  + 20 do miesiąca */
+				yearTwoFirstDigits = "20";
+				errors.rejectValue("peselNumber", "month>20");
+			} else if (month > 0 && month <= 12) { /*-  dla lat dla lat 1900 - 1999 */
+				yearTwoFirstDigits = "19";
+				/* jest ok */
+			} else {
+				errors.rejectValue("peselNumber", "wrongMonth");
+			}
+
+			log.info("Sprawdzam dzień");
+			int day = Integer.parseInt(person.getPeselNumber().substring(4, 6));
+
+			if (day > 31) { /*-  żaden miesiąc nie ma więcej niz 31 dni */
+				errors.rejectValue("peselNumber", "day>31");
+			}
+
+			log.info("Sprawdzam rok");
+			if (!yearTwoFirstDigits.equals("")) {
+				String yearAsString = yearTwoFirstDigits.concat(yearTwoLastDigits);
+				
+				DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+				format.setLenient(false); /*- wymuszenie błędu przy np. 29 lutym, gdy go nie było */
+
+				/*- 1999 luty -> 28 dni, 1996 luty -> 29 dni */
+				/*- zatem Pesel 99022955555  lub 96022955555 */
+
+				try {
+					format.parse(yearAsString + "-" + month + "-" + day);
+				} catch (ParseException e) { /*- data nie istnieje w kalendarzu */
+					errors.rejectValue("peselNumber", "dateDoesNotExist");
+					log.info(e.getMessage());
+					e.printStackTrace();
+				}
+
+				/*- sprawdzanie sumy kontrolnej: */
+				/*- np. 02070803628 -> ok. czyli z np. 2 na końcu nie ok */
+				Boolean isValid = checkControlNumber(person.getPeselNumber());
+
+				if (!isValid) {
+					errors.rejectValue("peselNumber", "wrongControlNumber");
+				}
+			}
+		}
 	}
 
 	public Boolean checkControlNumber(String peselNumber) {
@@ -125,12 +110,7 @@ public class PeselValidator implements Validator {
 		log.info("suma kontrolna wynosi po drugim modulo : " + sum);
 
 		char lastPeselNumberChar = peselNumber.charAt(peselNumber.length() - 1);
-		if (Character.getNumericValue(lastPeselNumberChar) == sum) {
-			return true;
-		} else {
-
-			return false;
-		}
+		return Character.getNumericValue(lastPeselNumberChar) == sum;
 	}
 
 	@Override
@@ -140,9 +120,9 @@ public class PeselValidator implements Validator {
 
 }
 
-/*- Kopia http://www.algorytm.org/numery-identyfikacyjne/pesel.html  poniżej*/
-
-/*
+/*- Kopia http://www.algorytm.org/numery-identyfikacyjne/pesel.html  poniżej
+ * 
+ * 
  * Zgodnie z informacją zamieszczoną na stronach rządowych Rejestr PESEL –
  * Powszechny Elektroniczny System Ewidencji Ludności prowadzony jest od 1979
  * roku i zawiera dane osób przebywających stale na terytorium RP, zameldowanych
@@ -178,12 +158,5 @@ public class PeselValidator implements Validator {
  * 27 + 6 + 6 = 132 Wynik dzielimy modulo przez 10. 132 mod 10 = 2 A następnie
  * odejmujemy od 10 10 - 2 = 8. I wynik dzielimy znów modulo 10 8 mod 10 = 8
  * Cyfra kontrolna to 8, zatem nasz prawidłowy numer PESEL to: 02070803628
- * 
- * 
- * 
- * 
- * 
- * 
- * 
  * 
  */
