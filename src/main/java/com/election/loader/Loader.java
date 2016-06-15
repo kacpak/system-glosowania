@@ -3,6 +3,9 @@ package com.election.loader;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
+
+import com.election.services.CitizensService;
+
 import org.apache.log4j.Logger;
 
 
@@ -16,7 +19,8 @@ public class Loader implements ApplicationListener<ContextRefreshedEvent> {
 	public void onApplicationEvent(ContextRefreshedEvent arg0) {
 		// TODO Auto-generated method stub
 		// tu dodawac obiekty i zapisywac na starcie aplikacji do repozytorium
-		
+		CitizensService cs = new CitizensService();
+		cs.addCitizen("64051684754", "GSF253641");
 	}
 	
 
